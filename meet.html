@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Таємниці зірок</title>
+    <link rel="stylesheet" href="meet.css" />
+  </head>
+  <body>
+    <main class="scene">
+      <section class="character" id="char-cain" style="display: none">
+        <img src="HSR-Cain-Ss1Ep8.png" alt="Кайн" />
+        <span class="char-name">Кейн</span>
+      </section>
+      <section class="character" id="char-sylvia">
+        <img src="sylvia (1) (1).png" alt="Сильвія" />
+        <span class="char-name">Сильвія</span>
+      </section>
+    </main>
+    <div class="dialogue-box">
+      <p class="dialogue-text">Привіт! Ти новенький у цьому світі?</p>
+    </div>
+    <div class="choices">
+      <button data-next="1">Так, я тут вперше.</button>
+      <button data-next="2">Ні, просто давно не заходив.</button>
+    </div>
+
+    <script>
+      const story = [
+        {
+          id: 0,
+          text: "ХТО ЦЕ",
+          speaker: "Сильвія",
+          characters: { cain: true, sylvia: false }, // Сильвія зліва, коли говорить Кейн
+          next: 1,
+          choices: [],
+        },
+        {
+          id: 1,
+          text: "УДАРЮ І УЄБУ",
+          speaker: "Каїн",
+          characters: { cain: true, sylvia: false }, // Кейн справа, коли говорить Сильвія
+          next: 2, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 2,
+          text: "ТВІЙ ВИБІР:",
+          speaker: "Сільвія",
+          characters: { cain: false, sylvia: true },
+          choices: [
+            { text: "Це я - твоя любима Сільвія-няшечка вкусняшечка", next: 3 },
+            {
+              text: "Уєбан заткниссь це я, забув шо ти бездомний і нікому не потрібен?",
+              next: 5,
+            },
+          ],
+        },
+        {
+          id: 3,
+          text: "О, да, моя хороша любима!!!!",
+          speaker: "Каїн",
+          characters: { cain: true, sylvia: false },
+          next: 4,
+          choices: [],
+        },
+        {
+          id: 4,
+          text: "(ФУХ ХОТЬ СЬОГОДНІ НЕ БУДЕ НАКАЗАННЯ)- каже у себе в думках",
+          speaker: "Кейн",
+          characters: { cain: true, sylvia: false },
+          next: 6, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 5,
+          text: "ВИБАЧ, НЕ БИЙ ХОТЬ СЬОГОДНІ",
+          speaker: "Каїн",
+          characters: { cain: true, sylvia: false },
+          next: 7, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 6,
+          text: "ШО ТИ ВЯКНУВ? (яку казнь ти будеш робити над каїном сьогодні)",
+          speaker: "Сильвія",
+          characters: { cain: false, sylvia: true },
+          choices: [
+            { text: "Приятна казнь", next: 10 },
+            { text: "Золотой дождь", next: 10 },
+          ],
+        },
+        {
+          id: 7,
+          text: "ФУХ. Мені такий сон приснився де ти говориш з Сашою, боже, такий кошмар",
+          speaker: "Каїн",
+          characters: { cain: true, sylvia: false },
+          next: 8, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 8,
+          text: "А, тю. Цей долбайоб, та він кончений, ніколи з ним",
+          speaker: "Кейн",
+          characters: { cain: false, sylvia: true },
+          next: 9,
+          choices: [],
+        },
+        {
+          id: 9,
+          text: "А давай тройнічок з Яном і ми?",
+          speaker: "Сільвія",
+          characters: { cain: false, sylvia: true },
+          next: 13,
+          choices: [],
+        },
+        {
+          id: 10,
+          text: "СТАВАЙ НА КОЛІНА БИСТРО",
+          speaker: "Сильвія",
+          characters: { cain: false, sylvia: true },
+          next: 11, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 11,
+          text: "НЕТТТТТТТТТТТТТТТТ, ТІЛЬКИ НЕ ЦЕ",
+          speaker: "Каїн",
+          characters: { cain: true, sylvia: false },
+          next: 12, // Проміжна сцена
+          choices: [],
+        },
+        {
+          id: 12,
+          text: "КІНЕЦЬ!",
+          speaker: "Сильвія",
+          characters: { cain: false, sylvia: false },
+          choices: [],
+        },
+        {
+          id: 13,
+          text: "КАНЕШНО ДАВАЙ Я ТІЛЬКИ ЗА",
+          speaker: "Кайн",
+          characters: { cain: true, sylvia: false },
+          next: 12,
+          choices: [],
+        },
+      ];
+
+      const dialogueText = document.querySelector(".dialogue-text");
+      const choicesContainer = document.querySelector(".choices");
+      const cainChar = document.querySelector("#char-cain");
+      const sylviaChar = document.querySelector("#char-sylvia");
+      const cainName = cainChar.querySelector(".char-name");
+      const sylviaName = sylviaChar.querySelector(".char-name");
+
+      function displayScene(sceneId) {
+        const scene = story.find((s) => s.id === sceneId);
+        if (!scene) return;
+
+        dialogueText.textContent = scene.text;
+        dialogueText.parentElement.style.animation = "none";
+        dialogueText.parentElement.offsetHeight;
+        dialogueText.parentElement.style.animation = "fadeIn 0.3s ease";
+
+        cainChar.style.display = scene.characters.cain ? "flex" : "none";
+        sylviaChar.style.display = scene.characters.sylvia ? "flex" : "none";
+
+        if (scene.speaker === "Кейн") {
+          cainName.textContent = "Кейн";
+        } else if (scene.speaker === "Сильвія") {
+          sylviaName.textContent = "Сильвія";
+        }
+
+        choicesContainer.innerHTML = "";
+        if (scene.choices.length > 0) {
+          scene.choices.forEach((choice) => {
+            const button = document.createElement("button");
+            button.textContent = choice.text;
+            button.setAttribute("data-next", choice.next);
+            button.addEventListener("click", () => displayScene(choice.next));
+            choicesContainer.appendChild(button);
+          });
+        } else if (scene.next !== undefined) {
+          const button = document.createElement("button");
+          button.textContent = "Продовжити";
+          button.className = "continue-btn";
+          button.addEventListener("click", () => displayScene(scene.next));
+          choicesContainer.appendChild(button);
+        }
+      }
+
+      document.querySelectorAll(".choices button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextScene = parseInt(button.getAttribute("data-next"));
+          displayScene(nextScene);
+        });
+      });
+
+      displayScene(0);
+    </script>
+  </body>
+</html>
